@@ -19,7 +19,7 @@ is-it-maintained-open-issues = { repository = "tversteeg/emplace" }
 anyhow = { version = "1.0.56", features = ["backtrace"] }
 bugreport = "0.5.0"
 clap = { version = "3.1.8", features = ["env", "cargo"] }
-clap_generate = "3.0.3"
+clap_complete = "3.1.1"
 colored = "2.0.0"
 console = "0.15.0"
 dialoguer = "0.10.0"
@@ -34,6 +34,10 @@ simplelog = "0.11.2"
 strum = "0.23.0"
 strum_macros = "0.24.0"
 toml = "0.5.8"
+shadow-rs = "0.11.0"
+
+[build-dependencies]
+shadow-rs = "0.11.0"
 
 [dev-dependencies]
 indoc = "1.0.4"

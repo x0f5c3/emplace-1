@@ -21,23 +21,27 @@ use bugreport::{
     },
     format::Markdown,
 };
-use clap::{App, AppSettings, Arg, ColorChoice};
+use clap::{AppSettings, Arg, ColorChoice, Command};
 use log::error;
+use shadow_rs::shadow;
 use simplelog::{ColorChoice as LogColorChoice, LevelFilter, TermLogger, TerminalMode};
 use std::path::PathBuf;
 
-fn public_clap_app<'a>() -> App<'a> {
-    App::new("emplace")
-        .version(clap::crate_version!())
+shadow!(build);
+
+fn public_clap_app<'a>() -> Command<'a> {
+    Command::new("emplace")
+        .version(build::PKG_VERSION)
         .author(clap::crate_authors!())
         .after_help("https://github.com/tversteeg/emplace")
         // Use the order specified for the subcommands, not alphabetically
         .setting(AppSettings::DeriveDisplayOrder)
-        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .subcommand_required(true)
+        .arg_required_else_help(true)
         // Print the help in colors if the terminal allows it
         .color(ColorChoice::Auto)
         .subcommand(
-            App::new("install")
+            Command::new("install")
                 .about("Install the packages that have been mirrored from other machines")
                 .arg(
                     Arg::new("yes")
@@ -46,7 +50,7 @@ fn public_clap_app<'a>() -> App<'a> {
                         .help("Don't prompt the user and try to install everything"),
                 ),
         )
-        .subcommand(App::new("clean").about("Remove package synching"))
+        .subcommand(Command::new("clean").about("Remove package synching"))
         .arg(
             Arg::new("config-path")
                 .short('c')
@@ -68,7 +72,7 @@ fn safe_main() -> Result<()> {
 
     let matches = public_clap_app()
 		.subcommand(
-			App::new("init")
+			Command::new("init")
 				.about("Prints the shell function used to execute emplace")
 				.arg(
 					Arg::new("shell")
@@ -80,7 +84,7 @@ fn safe_main() -> Result<()> {
 				)
 		)
 		.subcommand(
-			App::new("catch")
+			Command::new("catch")
 				.about("Capture a command entered in a terminal")
 				.arg(
 					Arg::new("line")
@@ -90,7 +94,7 @@ fn safe_main() -> Result<()> {
 				),
 		)
 		.subcommand(
-			App::new("history")
+			Command::new("history")
 				.about("Parses your history file and retrieves installations")
 				.arg(
 					Arg::new("history_file")
@@ -106,7 +110,7 @@ fn safe_main() -> Result<()> {
                 ),
 		)
         .subcommand(
-            App::new("config")
+            Command::new("config")
             .about("Provides options for managing configuration")
             .arg(
                 Arg::new("new")
@@ -124,7 +128,7 @@ fn safe_main() -> Result<()> {
             ),
         )
         .subcommand(
-            App::new("bugreport")
+            Command::new("bugreport")
             .about("Collect and print information that can be send along with a bug report")
         )
 		.get_matches();

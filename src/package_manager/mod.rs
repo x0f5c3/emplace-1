@@ -1,3 +1,4 @@
+#![allow(clippy::wrong_self_convention)]
 #[macro_use]
 pub mod test_macro;
 

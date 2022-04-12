@@ -107,9 +107,7 @@ where
         .dedup()
         // Get an iterator over all the matches in the line
         .map(|x| Packages::from_line(&x))
-        .map(|packages| packages.into_iter())
-        // Make it a big list
-        .flatten()
+        .flat_map(|packages| packages.into_iter())
         .collect()
 }
 
